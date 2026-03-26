@@ -1,4 +1,13 @@
 const nodemailer = require('nodemailer');
+const dns = require('dns');
+
+/**
+ * Custom lookup that forces IPv4 resolution.
+ * Render's free tier does not support outbound IPv6.
+ */
+const ipv4Lookup = (hostname, options, callback) => {
+    return dns.lookup(hostname, { ...options, family: 4 }, callback);
+};
 
 /**
  * Sends an email with the verification OTP using nodemailer.
@@ -15,13 +24,15 @@ exports.sendOTPEmail = async (email, otp) => {
     }
 
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
         },
         // Force IPv4 — Render's free tier cannot reach Gmail over IPv6
-        dnsOptions: { family: 4 },
+        lookup: ipv4Lookup,
     });
 
     const mailOptions = {
