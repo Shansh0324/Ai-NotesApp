@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Step 2: Axios Setup
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://notemeai.onrender.com/api",
   withCredentials: true,
 });
 
