@@ -16,6 +16,9 @@ const aiRoutes = require('./routes/aiRoutes');
 
 const app = express();
 
+// ─── Trust Proxy (Render runs behind a reverse proxy) ─────────
+app.set('trust proxy', 1);
+
 // ─── Security Headers ─────────────────────────────────────────
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },

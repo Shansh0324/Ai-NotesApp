@@ -15,11 +15,13 @@ exports.sendOTPEmail = async (email, otp) => {
     }
 
     const transporter = nodemailer.createTransport({
-        service: 'gmail', // you can change this depending on the provider
+        service: 'gmail',
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_PASS,
         },
+        // Force IPv4 — Render's free tier cannot reach Gmail over IPv6
+        dnsOptions: { family: 4 },
     });
 
     const mailOptions = {
