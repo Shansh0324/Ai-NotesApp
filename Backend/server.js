@@ -1,3 +1,7 @@
+const dns = require('dns');
+// Force all DNS resolution to prefer IPv4 — Render free tier has no outbound IPv6
+dns.setDefaultResultOrder('ipv4first');
+
 const dotenv = require('dotenv');
 
 // Load env vars BEFORE anything else
