@@ -23,8 +23,23 @@ app.use(helmet({
 }));
 
 // ─── CORS ─────────────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://notemeai.netlify.app',
+];
+// Also allow any origin set via env var
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, origin || true);
+    } else {
+      callback(new Error(`CORS: origin ${origin} not allowed`));
+    }
+  },
   credentials: true
 }));
 
